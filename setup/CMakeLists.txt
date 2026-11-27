@@ -1,18 +1,16 @@
-find_package(PkgConfig)
-pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0)
 
 add_executable(ibus-setup-unikey
     main.cpp
     signal_handlers.cpp
     macro_utils.cpp
 )
-target_link_libraries(ibus-setup-unikey
+target_link_libraries(ibus-setup-unikey PRIVATE
     ukengine
     unikey-config
-    ${GTK3_LIBRARIES}
+    PkgConfig::GTK3
 )
-target_include_directories(ibus-setup-unikey PUBLIC ${GTK3_INCLUDE_DIRS})
 
-install(TARGETS ibus-setup-unikey DESTINATION ${LIBEXECDIR})
-install(FILES ibus-unikey.ui DESTINATION ${PKGDATADIR}/ui)
-
+install(TARGETS ibus-setup-unikey DESTINATION "${LIBEXECDIR}")
+install(FILES ibus-unikey.ui DESTINATION "${PKGDATADIR}/ui")
